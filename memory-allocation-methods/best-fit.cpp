@@ -2,33 +2,48 @@
 
 using namespace std;
 
-
 int main(int argc, char const *argv[])
 {
-    int holes[] = { 12, 7, 15, 3, 21, 9, 27, 18 };
-    int n = sizeof(holes)/sizeof(holes[0]);
-    
-    int req = 13;
-    cout<<"Request for memory of size "<<req<<endl;
+    int holes[] = { 7, 12, 8, 3, 11, 15 };
 
-    int best = INT16_MAX;
-    int best_idx = 0;
+    int n = sizeof(holes)/ sizeof(int);
+
+    int m = n;
+    int req;
+    int occ[n];
     for(int i = 0; i < n; i++)
+        occ[i] = -1;
+
+    while(m--)
     {
-        if(holes[i] - req > 0 && holes[i] - req < best)
+        cin>> req;
+        int best = INT16_MAX;
+        int idx = -1;
+        for(int i = 0; i < n; i++)
         {
-            best = holes[i] - req;
-            best_idx = i;
+            int sz = holes[i] - req;
+            if(sz >= 0 && sz < best && occ[i] == -1)
+            {
+                best = sz;
+                idx = i;
+            }
+        }
+
+        if(idx != -1)
+        {
+            occ[idx] = n - m;
+            cout<<"Allocating hole-"<<idx+1<<" of size: "<<holes[idx]<<endl;
+        }
+
+        else
+        {
+            cout<<"Allocation failed for request of size: "<<req<<endl;
         }
     }
 
-    if(holes[best_idx] < req)
-    {
-        cout<<"No free holes found of required size"<<endl;
-        return 0;
-    }
-
-    cout<<"Allocate hole"<<best_idx+1<<" of size "<<holes[best_idx]<<endl;
+    for(int i = 0; i < n; i++)
+        cout<<occ[i]<<" ";
+    cout<<endl;
 
 
     return 0;
